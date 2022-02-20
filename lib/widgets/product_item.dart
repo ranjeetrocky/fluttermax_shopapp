@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:fluttermax_state_management_shopapp/screens/product_details_screen.dart';
 
 import '../models/product.dart';
 
@@ -13,36 +14,55 @@ class ProductItem extends StatelessWidget {
     return Card(
       elevation: 20,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: GridTile(
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
-          ),
-          header: GridTileBar(
-              leading: CircleAvatar(
-            backgroundColor: Colors.black26,
-            child: IconButton(
-              icon: const Icon(
-                Icons.favorite_outline_rounded,
-                color: Colors.red,
-              ),
-              onPressed: () {},
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ProductDetailsScreen(title: product.title),
+          ));
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: GridTile(
+            child: Image.network(
+              product.imageUrl,
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, imageChunkEvent) {
+                return imageChunkEvent == null
+                    ? child
+                    : Center(
+                        child: CircularProgressIndicator.adaptive(
+                          strokeWidth: 1,
+                          semanticsLabel: "Loading",
+                          value: (imageChunkEvent.cumulativeBytesLoaded /
+                              imageChunkEvent.expectedTotalBytes!),
+                        ),
+                      );
+              },
             ),
-          )),
-          footer: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: GridTileBar(
-                backgroundColor: Colors.black54,
-                trailing: IconButton(
-                  icon: const Icon(Icons.shopping_cart_outlined),
-                  onPressed: () {},
+            header: GridTileBar(
+                leading: CircleAvatar(
+              backgroundColor: Colors.black26,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.favorite_outline_rounded,
+                  color: Colors.red,
                 ),
-                title: Text(
-                  product.title,
-                  textAlign: TextAlign.center,
+                onPressed: () {},
+              ),
+            )),
+            footer: ClipRRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: GridTileBar(
+                  backgroundColor: Colors.black54,
+                  trailing: IconButton(
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                    onPressed: () {},
+                  ),
+                  title: Text(
+                    product.title,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),
