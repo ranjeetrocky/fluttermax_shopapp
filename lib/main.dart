@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.dark,
         useMaterial3: true,
         platform: currentPlatform,
+        fontFamily: 'Lato',
         appBarTheme: const AppBarTheme(
           systemOverlayStyle:
               SystemUiOverlayStyle(statusBarColor: Colors.transparent),
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.light,
         useMaterial3: true,
         platform: currentPlatform,
+        fontFamily: 'Lato',
         appBarTheme: const AppBarTheme(
           systemOverlayStyle:
               SystemUiOverlayStyle(statusBarColor: Colors.transparent),
