@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttermax_state_management_shopapp/providers/products.dart';
+import 'package:provider/provider.dart';
 import './screens/products_overview_screen.dart';
 
 const themeSeedColors = [
@@ -38,32 +40,35 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My shop',
-      darkTheme: ThemeData(
-        colorSchemeSeed: _seedColor,
-        brightness: Brightness.dark,
-        useMaterial3: true,
-        platform: currentPlatform,
-        fontFamily: 'Lato',
-        appBarTheme: const AppBarTheme(
-          systemOverlayStyle:
-              SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+    return ChangeNotifierProvider(
+      create: (context) => Products(),
+      child: MaterialApp(
+        title: 'My shop',
+        darkTheme: ThemeData(
+          colorSchemeSeed: _seedColor,
+          brightness: Brightness.dark,
+          useMaterial3: true,
+          platform: currentPlatform,
+          fontFamily: 'Lato',
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle:
+                SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+          ),
         ),
-      ),
-      theme: ThemeData(
-        colorSchemeSeed: _seedColor,
-        brightness: Brightness.light,
-        useMaterial3: true,
-        platform: currentPlatform,
-        fontFamily: 'Lato',
-        appBarTheme: const AppBarTheme(
-          systemOverlayStyle:
-              SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+        theme: ThemeData(
+          colorSchemeSeed: _seedColor,
+          brightness: Brightness.light,
+          useMaterial3: true,
+          platform: currentPlatform,
+          fontFamily: 'Lato',
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle:
+                SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+          ),
         ),
+        debugShowCheckedModeBanner: false,
+        home: ProductsOverviewScreen(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: ProductsOverviewScreen(),
     );
   }
 }
