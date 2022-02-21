@@ -9,7 +9,7 @@ class ProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Products>(context).findById(id);
+    final product = Provider.of<Products>(context, listen: false).findById(id);
     return Scaffold(
       appBar: AppBar(title: Text(product.title)),
     );
