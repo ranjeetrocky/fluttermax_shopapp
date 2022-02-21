@@ -37,8 +37,10 @@ class ProductItem extends StatelessWidget {
                         child: CircularProgressIndicator.adaptive(
                           strokeWidth: 1,
                           semanticsLabel: "Loading",
-                          value: (imageChunkEvent.cumulativeBytesLoaded /
-                              imageChunkEvent.expectedTotalBytes!),
+                          value: imageChunkEvent.expectedTotalBytes != null
+                              ? imageChunkEvent.cumulativeBytesLoaded /
+                                  imageChunkEvent.expectedTotalBytes!
+                              : null,
                         ),
                       );
               },
