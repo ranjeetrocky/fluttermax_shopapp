@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttermax_state_management_shopapp/providers/cart.dart';
 import 'package:fluttermax_state_management_shopapp/providers/products.dart';
 import 'package:provider/provider.dart';
 import './screens/products_overview_screen.dart';
@@ -40,8 +41,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Products(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => Products()),
+        ChangeNotifierProvider(create: (context) => Cart()),
+      ],
       child: MaterialApp(
         title: 'My shop',
         darkTheme: ThemeData(
