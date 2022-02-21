@@ -1,16 +1,19 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:fluttermax_state_management_shopapp/screens/product_details_screen.dart';
+import '../models/consts.dart';
+import '../screens/product_details_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
+import 'blurrycontainer.dart';
 
 class ProductItem extends StatelessWidget {
-  final Product product;
-  const ProductItem({Key? key, required this.product}) : super(key: key);
+  const ProductItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<Product>(context);
     return Card(
       elevation: 20,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -42,17 +45,27 @@ class ProductItem extends StatelessWidget {
             header: GridTileBar(
                 leading: CircleAvatar(
               backgroundColor: Colors.black26,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.favorite_outline_rounded,
-                  color: Colors.red,
+              child: BlurryContainer(
+                borderRadius: BorderRadius.circular(20),
+                blur: Consts.kBlur,
+                child: Material(
+                  color: Colors.transparent,
+                  child: IconButton(
+                    icon: Icon(
+                      product.isFavourite
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_outline_rounded,
+                      color: Colors.redAccent,
+                    ),
+                    onPressed: () => product.toggleFavouriteValue(),
+                  ),
                 ),
-                onPressed: () {},
               ),
             )),
             footer: ClipRRect(
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                filter: ImageFilter.blur(
+                    sigmaX: Consts.kBlur, sigmaY: Consts.kBlur),
                 child: GridTileBar(
                   backgroundColor: Colors.black54,
                   trailing: IconButton(
