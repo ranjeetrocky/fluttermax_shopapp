@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermax_state_management_shopapp/providers/products.dart';
+import '../providers/products.dart';
 import 'package:provider/provider.dart';
 
 import 'product_item.dart';
@@ -12,6 +12,7 @@ class ProductsGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsProvider = Provider.of<Products>(context);
+    final products = productsProvider.items;
     return GridView.builder(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(10),
@@ -21,8 +22,9 @@ class ProductsGridView extends StatelessWidget {
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
       ),
-      itemBuilder: (context, index) =>
-          ProductItem(product: productsProvider.items[index]),
+      itemBuilder: (context, index) => ChangeNotifierProvider(
+          create: (context) => products[index],
+          child: ProductItem(product: products[index])),
       itemCount: productsProvider.items.length,
     );
   }
