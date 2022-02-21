@@ -2,22 +2,13 @@ import 'package:flutter/material.dart';
 import 'product.dart';
 
 class Products with ChangeNotifier {
-  var _showFavoritesOnly = false;
   List<Product> get items {
-    return _showFavoritesOnly
-        ? _items.where((item) => item.isFavourite).toList()
-        // ? [..._items.where((item) => item.isFavourite).toList()] //no need to do this cause where method gives new list
-        : [..._items];
+    return [..._items];
   }
 
-  void showFavoriteOnly() {
-    _showFavoritesOnly = true;
-    notifyListeners();
-  }
-
-  void showAll() {
-    _showFavoritesOnly = false;
-    notifyListeners();
+  List<Product> get favoriteItems {
+    return _items.where((item) => item.isFavourite).toList();
+    // ? [..._items.where((item) => item.isFavourite).toList()] //no need to do this cause where method gives new list
   }
 
   Product findById(String id) {
