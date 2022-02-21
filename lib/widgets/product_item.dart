@@ -17,7 +17,7 @@ class ProductItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProductDetailsScreen(title: product.title),
+            builder: (context) => ProductDetailsScreen(id: product.id),
           ));
         },
         child: ClipRRect(
