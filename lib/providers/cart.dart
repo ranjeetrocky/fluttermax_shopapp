@@ -1,22 +1,13 @@
 import 'package:flutter/foundation.dart';
 
-class CartItem {
-  final String title, id;
-  final int quantity;
-  final double price;
-
-  CartItem({
-    required this.id,
-    required this.title,
-    required this.quantity,
-    required this.price,
-  });
-}
-
 class Cart with ChangeNotifier {
   final Map<String, CartItem> _cartItems = {};
   Map<String, CartItem> get cartItems {
     return {..._cartItems};
+  }
+
+  int get cartItemsCount {
+    return _cartItems.length;
   }
 
   void addCartItem({
@@ -44,5 +35,19 @@ class Cart with ChangeNotifier {
             price: price),
       );
     }
+    notifyListeners();
   }
+}
+
+class CartItem {
+  final String title, id;
+  final int quantity;
+  final double price;
+
+  CartItem({
+    required this.id,
+    required this.title,
+    required this.quantity,
+    required this.price,
+  });
 }

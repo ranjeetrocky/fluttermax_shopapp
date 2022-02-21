@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermax_state_management_shopapp/providers/products.dart';
+import 'package:fluttermax_state_management_shopapp/providers/cart.dart';
+import 'package:fluttermax_state_management_shopapp/widgets/badge.dart';
 import 'package:provider/provider.dart';
 import '../widgets/products_grid_view.dart';
 
@@ -23,6 +24,19 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       appBar: AppBar(
         title: const Text("My Shop"),
         actions: [
+          Consumer<Cart>(
+            builder: (_, cartProvider, child) {
+              return Badge(
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                value: cartProvider.cartItemsCount,
+                child: child as Widget,
+              );
+            },
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.shopping_cart_outlined),
+            ),
+          ),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             onSelected: (FilterOptions selectedOption) {
@@ -39,7 +53,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               const PopupMenuItem(
                   value: FilterOptions.all, child: Text("Show All")),
             ],
-          )
+          ),
         ],
       ),
       body: ProductsGridView(showOnlyFavorites: _showOnlyFavorite),

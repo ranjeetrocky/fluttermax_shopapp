@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _seedColor = themeSeedColors[Random().nextInt(7)];
+    _seedColor = themeSeedColors[Random().nextInt(themeSeedColors.length)];
   }
 
   @override
@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: ProductsOverviewScreen(),
+        home: const ProductsOverviewScreen(),
       ),
     );
   }

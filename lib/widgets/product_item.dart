@@ -1,6 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:fluttermax_state_management_shopapp/providers/cart.dart';
+import 'package:fluttermax_state_management_shopapp/widgets/ripple_circle_avatar.dart';
 import '../models/consts.dart';
 import '../screens/product_details_screen.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +14,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context);
     return Card(
       elevation: 20,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -65,20 +66,24 @@ class ProductItem extends StatelessWidget {
                 ),
               ),
             ),
-            footer: ClipRRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: Consts.kBlur, sigmaY: Consts.kBlur),
-                child: GridTileBar(
-                  backgroundColor: Colors.black54,
-                  trailing: IconButton(
-                    icon: const Icon(Icons.shopping_cart_outlined),
-                    onPressed: () {},
+            footer: BlurryContainer(
+              blur: Consts.kBlur,
+              child: GridTileBar(
+                backgroundColor: Colors.black54,
+                trailing: RippleCircleAvatar(
+                  child: IconButton(
+                    icon: const Icon(Icons.add_shopping_cart_rounded),
+                    onPressed: () {
+                      cart.addCartItem(
+                          productId: product.id,
+                          title: product.title,
+                          price: product.price);
+                    },
                   ),
-                  title: Text(
-                    product.title,
-                    textAlign: TextAlign.center,
-                  ),
+                ),
+                title: Text(
+                  product.title,
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
