@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttermax_state_management_shopapp/providers/cart.dart';
+import 'package:fluttermax_state_management_shopapp/providers/orders.dart';
 import 'package:fluttermax_state_management_shopapp/providers/products.dart';
 import 'package:fluttermax_state_management_shopapp/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +47,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (context) => Products()),
         ChangeNotifierProvider(create: (context) => Cart()),
+        ChangeNotifierProvider(create: (context) => Orders()),
       ],
       child: MaterialApp(
         title: 'My shop',
