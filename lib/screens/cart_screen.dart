@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermax_state_management_shopapp/providers/cart.dart';
+import '../providers/cart.dart' show Cart;
+import '../widgets/cart_item.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
@@ -18,7 +19,6 @@ class CartScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Card(
-                  margin: const EdgeInsets.all(0),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -33,6 +33,16 @@ class CartScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return CartItem(
+                        cartItem: cart.cartItems.values.toList()[index],
+                      );
+                    },
+                    itemCount: cart.cartItems.length,
                   ),
                 ),
                 ElevatedButton(onPressed: () {}, child: const Text('ORDER NOW'))

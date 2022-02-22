@@ -59,6 +59,9 @@ class _MyAppState extends State<MyApp> {
             systemOverlayStyle:
                 SystemUiOverlayStyle(statusBarColor: Colors.transparent),
           ),
+          cardTheme: const CardTheme(
+            elevation: 30,
+          ),
         ),
         theme: ThemeData(
           colorSchemeSeed: _seedColor,
@@ -69,6 +72,9 @@ class _MyAppState extends State<MyApp> {
           appBarTheme: const AppBarTheme(
             systemOverlayStyle:
                 SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+          ),
+          cardTheme: const CardTheme(
+            elevation: 30,
           ),
         ),
         debugShowCheckedModeBanner: false,
