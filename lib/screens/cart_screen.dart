@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttermax_state_management_shopapp/providers/orders.dart';
 import '../providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,14 @@ class CartScreen extends StatelessWidget {
                     itemCount: cart.cartItems.length,
                   ),
                 ),
-                ElevatedButton(onPressed: () {}, child: const Text('ORDER NOW'))
+                ElevatedButton(
+                  onPressed: () {
+                    Provider.of<Orders>(context, listen: false).addOrder(
+                        cart.cartItems.values.toList(), cart.totalAmount);
+                    cart.clear();
+                  },
+                  child: const Text('ORDER NOW'),
+                ),
               ],
             );
           },
