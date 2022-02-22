@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermax_state_management_shopapp/providers/cart.dart';
 import 'package:fluttermax_state_management_shopapp/screens/cart_screen.dart';
+import 'package:fluttermax_state_management_shopapp/widgets/app_drawer.dart';
 import 'package:fluttermax_state_management_shopapp/widgets/badge.dart';
 import 'package:provider/provider.dart';
 import '../widgets/products_grid_view.dart';
@@ -22,6 +23,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: const Text("My Shop"),
         actions: [

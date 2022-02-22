@@ -5,6 +5,7 @@ import 'package:fluttermax_state_management_shopapp/widgets/order_item.dart';
 import 'package:provider/provider.dart';
 
 class OrderScreen extends StatelessWidget {
+  static const routeName = '/OrderScreen';
   const OrderScreen({Key? key}) : super(key: key);
 
   @override
