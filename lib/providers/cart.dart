@@ -7,7 +7,20 @@ class Cart with ChangeNotifier {
   }
 
   int get cartItemsCount {
-    return _cartItems.length;
+    return _cartItems.length; //for total items
+    // var total = 0;
+    // _cartItems.forEach((key, cartItem) {
+    //   total += cartItem.quantity;
+    // });
+    // return total; //for total quantity of items
+  }
+
+  double get totalAmount {
+    var total = 0.0;
+    _cartItems.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+    return total;
   }
 
   void addCartItem({
