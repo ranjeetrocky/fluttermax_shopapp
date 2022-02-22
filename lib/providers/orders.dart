@@ -33,14 +33,4 @@ class Orders with ChangeNotifier {
     );
     notifyListeners();
   }
-
-  void removeItem(String productId) {
-    _orderItems.remove(productId);
-    notifyListeners();
-  }
-
-  void clear() {
-    _orderItems.clear();
-    notifyListeners();
-  }
 }
