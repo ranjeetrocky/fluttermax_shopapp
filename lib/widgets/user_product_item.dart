@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermax_state_management_shopapp/screens/edit_product_sceen.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
+import '../providers/products.dart';
 
 class UserProductItemWidget extends StatelessWidget {
   final Product product;
@@ -35,7 +37,10 @@ class UserProductItemWidget extends StatelessWidget {
               Icons.delete_outline_rounded,
               color: Theme.of(context).colorScheme.error,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<Products>(context, listen: false)
+                  .deleteProduct(product.id);
+            },
           ),
         ],
       ),
