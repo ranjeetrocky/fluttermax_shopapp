@@ -58,7 +58,7 @@ class ProductItem extends StatelessWidget {
                     child: Consumer<Product>(
                       builder: (context, product, _) => IconButton(
                         icon: Icon(
-                          product.isFavourite
+                          product.isFavorite
                               ? Icons.favorite_rounded
                               : Icons.favorite_outline_rounded,
                           color: Colors.redAccent,

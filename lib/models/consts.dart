@@ -4,4 +4,9 @@ class Consts {
   static const bool kReleaseMode = bool.fromEnvironment('dart.vm.product');
   static const bool kProfileMode = bool.fromEnvironment('dart.vm.profile');
   static const bool kDebugMode = !kReleaseMode && !kProfileMode;
+  static const String kFirebaseDatabaseUrl =
+      'https://shop-app-6f3a8-default-rtdb.asia-southeast1.firebasedatabase.app/';
+  static const String kFirebaseDatabaseScheme = 'https';
+  static const String kFirebaseDatabaseHost =
+      'shop-app-6f3a8-default-rtdb.asia-southeast1.firebasedatabase.app';
 }

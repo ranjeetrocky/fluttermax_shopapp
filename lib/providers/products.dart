@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttermax_state_management_shopapp/models/consts.dart';
 import 'product.dart';
+import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
   List<Product> get items {
@@ -7,7 +11,7 @@ class Products with ChangeNotifier {
   }
 
   List<Product> get favoriteItems {
-    return _items.where((item) => item.isFavourite).toList();
+    return _items.where((item) => item.isFavorite).toList();
     // ? [..._items.where((item) => item.isFavourite).toList()] //no need to do this cause where method gives new list
   }
 
@@ -15,17 +19,40 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  void addProduct(Product product) {
-    _items.insert(
-        0,
-        Product(
-          id: DateTime.now().toString(),
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl,
-        ));
-    notifyListeners();
+  Future addProduct(Product product) {
+    var newProduct = Product(
+      id: DateTime.now().toString(),
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    );
+    return http
+        .post(
+            Uri(
+              scheme: 'https',
+              host: Consts.kFirebaseDatabaseHost,
+              path: 'products.json',
+            ),
+            body: json.encode({
+              'title': newProduct.title,
+              'description': newProduct.description,
+              'price': newProduct.price,
+              'imageUrl': newProduct.imageUrl,
+              'isFavorite': newProduct.isFavorite,
+            }))
+        .then((response) {
+      _items.insert(
+          0,
+          newProduct = Product(
+            id: json.decode(response.body)['name'],
+            title: product.title,
+            description: product.description,
+            price: product.price,
+            imageUrl: product.imageUrl,
+          ));
+      notifyListeners();
+    });
   }
 
   void updateproduct(String id, Product newPoduct) {
