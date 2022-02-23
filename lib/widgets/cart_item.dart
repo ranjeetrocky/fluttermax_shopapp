@@ -17,42 +17,44 @@ class CartItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     // final cart = Provider.of
     return Card(
-      child: Dismissible(
-        key: ValueKey(cartItem.id),
-        direction: DismissDirection.endToStart,
-        confirmDismiss: (direction) => showDialog(
-          context: context,
-          builder: (dialogContext) => AlertDialog(
-            title: const Text('Are you sure?'),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(true),
-                  child: const Text('Remove Item')),
-              TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(false),
-                  child: const Text('Cancel'))
-            ],
+      child: ClipRRect(
+        child: Dismissible(
+          key: ValueKey(cartItem.id),
+          direction: DismissDirection.endToStart,
+          confirmDismiss: (direction) => showDialog(
+            context: context,
+            builder: (dialogContext) => AlertDialog(
+              title: const Text('Are you sure?'),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(true),
+                    child: const Text('Remove Item')),
+                TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(false),
+                    child: const Text('Cancel'))
+              ],
+            ),
           ),
-        ),
-        onDismissed: (direction) {
-          Provider.of<ci.Cart>(context, listen: false).removeItem(productId);
-        },
-        dragStartBehavior: DragStartBehavior.down,
-        background: Container(
-          color: colorScheme.errorContainer,
-          child: Icon(
-            Icons.delete_outline_rounded,
-            color: colorScheme.error,
+          onDismissed: (direction) {
+            Provider.of<ci.Cart>(context, listen: false).removeItem(productId);
+          },
+          dragStartBehavior: DragStartBehavior.down,
+          background: Container(
+            color: colorScheme.errorContainer,
+            child: Icon(
+              Icons.delete_outline_rounded,
+              color: colorScheme.error,
+            ),
           ),
-        ),
-        child: ListTile(
-          title: Text(
-            cartItem.title,
+          child: ListTile(
+            title: Text(
+              cartItem.title,
+            ),
+            trailing: Text(
+              'Total: \$ ${cartItem.price * cartItem.quantity}',
+            ),
+            subtitle: Text('${cartItem.quantity} x ${cartItem.price}'),
           ),
-          trailing: Text(
-            'Total: \$ ${cartItem.price * cartItem.quantity}',
-          ),
-          subtitle: Text('${cartItem.quantity} x ${cartItem.price}'),
         ),
       ),
     );

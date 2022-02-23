@@ -7,6 +7,7 @@ import 'package:fluttermax_state_management_shopapp/providers/orders.dart';
 import 'package:fluttermax_state_management_shopapp/providers/products.dart';
 import 'package:fluttermax_state_management_shopapp/screens/cart_screen.dart';
 import 'package:fluttermax_state_management_shopapp/screens/order_screen.dart';
+import 'package:fluttermax_state_management_shopapp/screens/user_products_sceen.dart';
 import 'package:provider/provider.dart';
 import './screens/products_overview_screen.dart';
 
@@ -85,6 +86,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           CartScreen.routeName: (context) => const CartScreen(),
           OrderScreen.routeName: (context) => const OrderScreen(),
+          UserProductsScreen.routName: (context) => const UserProductsScreen(),
         },
       ),
     );
