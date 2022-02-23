@@ -103,9 +103,22 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((product) => product.id == id);
+  Future<void> deleteProduct(String id) async {
+    final uri = Uri(
+        scheme: Consts.kFirebaseDatabaseScheme,
+        host: Consts.kFirebaseDatabaseHost,
+        path: 'products/$id.json');
+    final existingProductIndex =
+        _items.indexWhere((product) => product.id == id);
+    Product? existingProduct = _items[existingProductIndex];
+    _items.removeAt(existingProductIndex);
     notifyListeners();
+    http.delete(uri).then((_) {
+      existingProduct = null;
+    }).catchError((_) {
+      _items.insert(existingProductIndex, existingProduct!);
+      notifyListeners();
+    });
   }
 
   final List<Product> _items = [
