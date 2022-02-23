@@ -12,7 +12,7 @@ class Products with ChangeNotifier {
 
   List<Product> get favoriteItems {
     return _items.where((item) => item.isFavorite).toList();
-    // ? [..._items.where((item) => item.isFavourite).toList()] //no need to do this cause where method gives new list
+    // ? [..._items.where((item) => item.isFavurite).toList()] //no need to do this cause where method gives new list
   }
 
   Product findById(String id) {
@@ -52,7 +52,7 @@ class Products with ChangeNotifier {
             imageUrl: product.imageUrl,
           ));
       notifyListeners();
-    });
+    }).catchError((error) => throw error);
   }
 
   void updateproduct(String id, Product newPoduct) {

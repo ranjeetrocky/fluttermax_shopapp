@@ -91,9 +91,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_newProduct.id == '') {
       Provider.of<Products>(context, listen: false)
           .addProduct(_newProduct)
-          .then((_) {
-        Navigator.of(context).pop();
+          .catchError((error) {
+        return showDialog<Null>(
+          context: context,
+          builder: (bctx) => AlertDialog(
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(bctx).pop();
+                },
+                child: const Text('Okay'),
+              ),
+            ],
+            content: const Text('Something went wrong...'),
+            title: const Text('An error occured...'),
+          ),
+        );
+      }).then((_) {
         _isloading = false;
+        print('trying to get out of edit screen');
+        Navigator.of(context).pop();
       });
     } else {
       Provider.of<Products>(context, listen: false)
