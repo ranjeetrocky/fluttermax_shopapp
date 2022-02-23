@@ -45,6 +45,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveProduct() {
+    if (!_productForm.currentState!.validate()) {
+      return;
+    }
     _productForm.currentState?.save();
     print(_newProduct.id);
     print(_newProduct.title);
@@ -84,6 +87,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: _newProduct.price,
                       imageUrl: _newProduct.imageUrl);
                 },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please Enter Title'; //error message in not valid
+                  }
+                  return null; //if the valid
+                },
               ),
               TextFormField(
                 decoration: const InputDecoration(label: Text('Price')),
@@ -101,6 +110,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: double.parse(value!),
                       imageUrl: _newProduct.imageUrl);
                 },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please Enter Price'; //error message in not valid
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Please Enter a valid number'; //error message in not valid
+                  }
+                  if (double.parse(value) < 1) {
+                    return 'Price must be greater than 0'; //error message in not valid
+                  }
+                  return null; //if the valid
+                },
               ),
               TextFormField(
                 decoration: const InputDecoration(label: Text('Description')),
@@ -117,6 +138,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       description: value!,
                       price: _newProduct.price,
                       imageUrl: _newProduct.imageUrl);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please Enter Description'; //error message in not valid
+                  }
+                  if (value.length < 11) {
+                    return 'Description must be longer that 10 characters'; //error message in not valid
+                  }
+                  return null; //if the valid
                 },
               ),
               // const SizedBox(
@@ -162,6 +192,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             description: _newProduct.description,
                             price: _newProduct.price,
                             imageUrl: value!);
+                      },
+
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please Enter Image URL'; //error message in not valid
+                        }
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) {
+                          return 'Please Enter valid Image URL'; //error message in not valid
+                        }
+                        return null; //if the valid
                       },
                     ),
                   ),
