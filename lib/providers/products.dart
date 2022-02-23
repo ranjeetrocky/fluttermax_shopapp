@@ -77,14 +77,30 @@ class Products with ChangeNotifier {
     }
   }
 
-  void updateproduct(String id, Product newPoduct) {
-    final productIndex = _items.indexWhere((product) => product.id == id);
-    if (productIndex >= 0) {
-      _items[productIndex] = newPoduct;
-    } else {
-      print('...');
+  Future<void> updateproduct(String id, Product newPoduct) async {
+    try {
+      final uri = Uri(
+          scheme: Consts.kFirebaseDatabaseScheme,
+          host: Consts.kFirebaseDatabaseHost,
+          path: 'products/$id.json');
+      await http.patch(uri,
+          body: json.encode({
+            'title': newPoduct.title,
+            'price': newPoduct.price,
+            'description': newPoduct.description,
+            'imageUrl': newPoduct.imageUrl
+          }));
+      final productIndex = _items.indexWhere((product) => product.id == id);
+      if (productIndex >= 0) {
+        _items[productIndex] = newPoduct;
+      } else {
+        print('...');
+      }
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
     }
-    notifyListeners();
   }
 
   void deleteProduct(String id) {

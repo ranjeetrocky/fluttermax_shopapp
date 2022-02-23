@@ -88,36 +88,36 @@ class _EditProductScreenState extends State<EditProductScreen> {
     setState(() {
       _isloading = true;
     });
-    if (_newProduct.id == '') {
-      try {
+    try {
+      if (_newProduct.id == '') {
         await Provider.of<Products>(context, listen: false)
             .addProduct(_newProduct);
-      } catch (error) {
-        await showDialog<Null>(
-          context: context,
-          builder: (bctx) => AlertDialog(
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(bctx).pop();
-                },
-                child: const Text('Okay'),
-              ),
-            ],
-            content: const Text('Something went wrong...'),
-            title: const Text('An error occured...'),
-          ),
-        );
-      } finally {
-        _isloading = false;
-        print("Finally ran");
-        Navigator.of(context).pop();
+      } else {
+        await Provider.of<Products>(context, listen: false)
+            .updateproduct(_newProduct.id, _newProduct);
       }
-    } else {
-      Provider.of<Products>(context, listen: false)
-          .updateproduct(_newProduct.id, _newProduct);
+    } catch (error) {
+      await showDialog<Null>(
+        context: context,
+        builder: (bctx) => AlertDialog(
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(bctx).pop();
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+          content: const Text('Something went wrong...'),
+          title: const Text('An error occured...'),
+        ),
+      );
+    } finally {
+      _isloading = false;
+      print("Finally ran");
       Navigator.of(context).pop();
     }
+
     print(_newProduct.id);
     print(_newProduct.title);
     print(_newProduct.price);
