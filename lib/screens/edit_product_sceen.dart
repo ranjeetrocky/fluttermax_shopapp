@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermax_state_management_shopapp/providers/product.dart';
+import 'package:fluttermax_state_management_shopapp/providers/products.dart';
+import 'package:provider/provider.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/editProductScreen';
@@ -54,6 +56,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
     print(_newProduct.price);
     print(_newProduct.description);
     print(_newProduct.imageUrl);
+    Provider.of<Products>(context, listen: false).addProduct(_newProduct);
+    Navigator.of(context).pop();
   }
 
   @override
