@@ -1,4 +1,13 @@
-# fluttermax_state_management_shopapp
+# Shop App Branch info
+
+## state-managment
+- Implemented State Managment Using Provider
+
+## User-input-&-Forms-tutorial
+- Taking Userinputs & Forms
+
+
+# fluttermax_ shopapp
 
 A new Flutter project.
 

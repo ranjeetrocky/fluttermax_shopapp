@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttermax_state_management_shopapp/providers/cart.dart';
-import 'package:fluttermax_state_management_shopapp/providers/orders.dart';
-import 'package:fluttermax_state_management_shopapp/providers/products.dart';
-import 'package:fluttermax_state_management_shopapp/screens/cart_screen.dart';
-import 'package:fluttermax_state_management_shopapp/screens/order_screen.dart';
-import 'package:fluttermax_state_management_shopapp/screens/user_products_sceen.dart';
 import 'package:provider/provider.dart';
+import './providers/cart.dart';
+import './providers/orders.dart';
+import './providers/products.dart';
+import './screens/cart_screen.dart';
+import './screens/edit_product_sceen.dart';
+import './screens/order_screen.dart';
+import './screens/user_products_sceen.dart';
 import './screens/products_overview_screen.dart';
 
 const themeSeedColors = [
@@ -87,6 +88,7 @@ class _MyAppState extends State<MyApp> {
           CartScreen.routeName: (context) => const CartScreen(),
           OrderScreen.routeName: (context) => const OrderScreen(),
           UserProductsScreen.routName: (context) => const UserProductsScreen(),
+          EditProductScreen.routeName: (context) => const EditProductScreen(),
         },
       ),
     );
