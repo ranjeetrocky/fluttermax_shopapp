@@ -6,6 +6,14 @@ import 'product.dart';
 import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
+  // Products() {
+  //   fetchAndSetProducts();
+  // }
+  Uri productsUri = Uri(
+    scheme: 'https',
+    host: Consts.kFirebaseDatabaseHost,
+    path: 'products.json',
+  );
   List<Product> get items {
     return [..._items];
   }
@@ -19,6 +27,23 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
+  Future<void> fetchAndSetProducts() async {
+    final response = await http.get(productsUri);
+    var productData = json.decode(response.body) as Map<String, dynamic>;
+    _items.clear();
+    print("Updating Products");
+    productData.forEach((productId, productData) {
+      _items.add(Product(
+          id: productId,
+          title: productData['title'],
+          description: productData['description'],
+          price: double.parse(productData['price'].toString()),
+          imageUrl: productData['imageUrl']));
+    });
+    print(_items.length);
+    notifyListeners();
+  }
+
   Future<void> addProduct(Product product) async {
     var newProduct = Product(
       id: DateTime.now().toString(),
@@ -28,12 +53,7 @@ class Products with ChangeNotifier {
       imageUrl: product.imageUrl,
     );
     try {
-      final response = await http.post(
-          Uri(
-            scheme: 'https',
-            host: Consts.kFirebaseDatabaseHost,
-            path: 'products.json',
-          ),
+      final response = await http.post(productsUri,
           body: json.encode({
             'title': newProduct.title,
             'description': newProduct.description,
