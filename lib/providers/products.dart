@@ -16,15 +16,23 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product product) {
-    _items.insert(
-        0,
-        Product(
-          id: DateTime.now().toString(),
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl,
-        ));
+    _items.add(Product(
+      id: DateTime.now().toString(),
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    ));
+    notifyListeners();
+  }
+
+  void updateproduct(String id, Product newPoduct) {
+    final productIndex = _items.indexWhere((product) => product.id == id);
+    if (productIndex >= 0) {
+      _items[productIndex] = newPoduct;
+    } else {
+      print('...');
+    }
     notifyListeners();
   }
 

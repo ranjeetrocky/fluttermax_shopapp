@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:fluttermax_state_management_shopapp/screens/edit_product_sceen.dart';
+
+import '../providers/product.dart';
 
 class UserProductItemWidget extends StatelessWidget {
-  final String title, imageUrl;
+  final Product product;
   const UserProductItemWidget({
     Key? key,
-    required this.title,
-    required this.imageUrl,
+    required this.product,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title),
+      title: Text(product.title),
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(imageUrl),
+        backgroundImage: NetworkImage(product.imageUrl),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -23,7 +25,10 @@ class UserProductItemWidget extends StatelessWidget {
               Icons.edit_rounded,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(EditProductScreen.routeName,
+                  arguments: product.id);
+            },
           ),
           IconButton(
             icon: Icon(
