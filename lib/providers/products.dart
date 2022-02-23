@@ -19,7 +19,7 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  Future addProduct(Product product) {
+  Future<void> addProduct(Product product) async {
     var newProduct = Product(
       id: DateTime.now().toString(),
       title: product.title,
@@ -27,21 +27,20 @@ class Products with ChangeNotifier {
       price: product.price,
       imageUrl: product.imageUrl,
     );
-    return http
-        .post(
-            Uri(
-              scheme: 'https',
-              host: Consts.kFirebaseDatabaseHost,
-              path: 'products.json',
-            ),
-            body: json.encode({
-              'title': newProduct.title,
-              'description': newProduct.description,
-              'price': newProduct.price,
-              'imageUrl': newProduct.imageUrl,
-              'isFavorite': newProduct.isFavorite,
-            }))
-        .then((response) {
+    try {
+      final response = await http.post(
+          Uri(
+            scheme: 'https',
+            host: Consts.kFirebaseDatabaseHost,
+            path: 'products.json',
+          ),
+          body: json.encode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'price': newProduct.price,
+            'imageUrl': newProduct.imageUrl,
+            'isFavorite': newProduct.isFavorite,
+          }));
       _items.insert(
           0,
           newProduct = Product(
@@ -52,7 +51,10 @@ class Products with ChangeNotifier {
             imageUrl: product.imageUrl,
           ));
       notifyListeners();
-    }).catchError((error) => throw error);
+    } catch (error) {
+      print(error);
+      throw error;
+    }
   }
 
   void updateproduct(String id, Product newPoduct) {

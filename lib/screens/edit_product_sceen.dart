@@ -80,7 +80,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveProduct() {
+  Future<void> _saveProduct() async {
     if (!_productForm.currentState!.validate()) {
       return;
     }
@@ -89,10 +89,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isloading = true;
     });
     if (_newProduct.id == '') {
-      Provider.of<Products>(context, listen: false)
-          .addProduct(_newProduct)
-          .catchError((error) {
-        return showDialog<Null>(
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_newProduct);
+      } catch (error) {
+        await showDialog<Null>(
           context: context,
           builder: (bctx) => AlertDialog(
             actions: [
@@ -107,11 +108,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
             title: const Text('An error occured...'),
           ),
         );
-      }).then((_) {
+      } finally {
         _isloading = false;
-        print('trying to get out of edit screen');
+        print("Finally ran");
         Navigator.of(context).pop();
-      });
+      }
     } else {
       Provider.of<Products>(context, listen: false)
           .updateproduct(_newProduct.id, _newProduct);
