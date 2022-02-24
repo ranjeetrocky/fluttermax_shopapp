@@ -39,7 +39,8 @@ class Products with ChangeNotifier {
           title: productData['title'],
           description: productData['description'],
           price: double.parse(productData['price'].toString()),
-          imageUrl: productData['imageUrl']));
+          imageUrl: productData['imageUrl'],
+          isFavorite: productData['isFavorite']));
     });
     print(_items.length);
     notifyListeners();
