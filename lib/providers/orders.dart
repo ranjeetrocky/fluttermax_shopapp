@@ -21,7 +21,7 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-  final List<OrderItem> _orderItems = [];
+  List<OrderItem> _orderItems = [];
   List<OrderItem> get orderItems {
     return _orderItems;
   }
@@ -31,6 +31,35 @@ class Orders with ChangeNotifier {
     host: Consts.kFirebaseDatabaseHost,
     path: 'orders.json',
   );
+  Future<void> fetchAndSet() async {
+    try {
+      final response = await http.get(ordersUri);
+      var data = json.decode(response.body);
+      if (data != null) {
+        _orderItems.clear();
+        data = data as Map<String, dynamic>;
+        data.forEach((orderId, orderData) {
+          _orderItems.add(
+            OrderItem(
+                id: orderId,
+                amount: orderData['amount'],
+                products: (orderData['products'] as List<dynamic>)
+                    .map((product) => CartItem(
+                        id: product['id'],
+                        title: product['title'],
+                        quantity: product['quantity'],
+                        price: product['price']))
+                    .toList(),
+                dateTime: DateTime.parse(orderData['dateTime'])),
+          );
+        });
+        _orderItems = _orderItems.reversed.toList();
+        notifyListeners();
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
 
   Future<void> addOrder(List<CartItem> cartproducts, double total) async {
     final timestamp = DateTime.now();

@@ -17,7 +17,7 @@ class CartScreen extends StatelessWidget {
         child: Consumer<Cart>(
           builder: (context, cart, child) {
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Card(
                   child: Padding(
@@ -37,6 +37,7 @@ class CartScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                OrderButton(cart: cart),
                 Expanded(
                   child: ListView.builder(
                     itemBuilder: (context, index) {
@@ -48,7 +49,6 @@ class CartScreen extends StatelessWidget {
                     itemCount: cart.cartItems.length,
                   ),
                 ),
-                OrderButton(cart: cart),
               ],
             );
           },
