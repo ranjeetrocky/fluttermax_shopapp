@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttermax_state_management_shopapp/models/consts.dart';
+import 'package:fluttermax_state_management_shopapp/models/http_exeption.dart';
 import 'product.dart';
 import 'package:http/http.dart' as http;
 
@@ -113,12 +114,18 @@ class Products with ChangeNotifier {
     Product? existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
     notifyListeners();
-    http.delete(uri).then((_) {
-      existingProduct = null;
-    }).catchError((_) {
-      _items.insert(existingProductIndex, existingProduct!);
+    try {
+      final response = await http.delete(uri);
+      if (response.statusCode != 200) {
+        throw HttpExeption('Could not Delete');
+      }
+    } catch (error) {
+      print(error);
+      _items.insert(existingProductIndex, existingProduct);
       notifyListeners();
-    });
+      throw Exception(error);
+    }
+    existingProduct = null;
   }
 
   final List<Product> _items = [

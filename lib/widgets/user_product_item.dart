@@ -14,6 +14,7 @@ class UserProductItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldMessengerObj = ScaffoldMessenger.of(context);
     return ListTile(
       title: Text(product.title),
       leading: CircleAvatar(
@@ -37,9 +38,18 @@ class UserProductItemWidget extends StatelessWidget {
               Icons.delete_outline_rounded,
               color: Theme.of(context).colorScheme.error,
             ),
-            onPressed: () {
-              Provider.of<Products>(context, listen: false)
-                  .deleteProduct(product.id);
+            onPressed: () async {
+              try {
+                await Provider.of<Products>(context, listen: false)
+                    .deleteProduct(product.id);
+                scaffoldMessengerObj.showSnackBar(const SnackBar(
+                    content: Text('Product Deleted Successfully',
+                        textAlign: TextAlign.center)));
+              } catch (error) {
+                scaffoldMessengerObj.showSnackBar(const SnackBar(
+                    content: Text('Could not deleted Product',
+                        textAlign: TextAlign.center)));
+              }
             },
           ),
         ],
