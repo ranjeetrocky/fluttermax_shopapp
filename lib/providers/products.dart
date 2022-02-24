@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:fluttermax_state_management_shopapp/models/consts.dart';
-import 'package:fluttermax_state_management_shopapp/models/http_exeption.dart';
+import '../models/consts.dart';
+import '../models/http_exeption.dart';
 import 'product.dart';
 import 'package:http/http.dart' as http;
 

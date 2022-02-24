@@ -48,19 +48,62 @@ class CartScreen extends StatelessWidget {
                     itemCount: cart.cartItems.length,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Provider.of<Orders>(context, listen: false).addOrder(
-                        cart.cartItems.values.toList(), cart.totalAmount);
-                    cart.clear();
-                  },
-                  child: const Text('ORDER NOW'),
-                ),
+                OrderButton(cart: cart),
               ],
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  final Cart cart;
+  const OrderButton({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: widget.cart.totalAmount <= 0
+          ? null
+          : () async {
+              setState(() {
+                _isLoading = true;
+              });
+              try {
+                await Provider.of<Orders>(context, listen: false).addOrder(
+                    widget.cart.cartItems.values.toList(),
+                    widget.cart.totalAmount);
+                widget.cart.clear();
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Order is Placed')));
+              } catch (error) {
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Couldn\'t place your Order')));
+              } finally {
+                setState(() {
+                  _isLoading = false;
+                });
+              }
+            },
+      child: _isLoading
+          ? Expanded(
+              child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primaryContainer,
+            ))
+          : const Text('ORDER NOW'),
     );
   }
 }
