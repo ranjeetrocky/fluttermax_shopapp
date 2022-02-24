@@ -51,10 +51,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           builder: (bctx) => AlertDialog(
             actions: [
               TextButton(
-                  onPressed: () {
-                    Navigator.of(bctx).pop();
-                  },
-                  child: const Text('Okay'))
+                onPressed: () {
+                  Navigator.of(bctx).pop();
+                },
+                child: const Text('Okay'),
+              ),
             ],
             content: const Text('Something went wrong...'),
             title: const Text('An error occured'),
