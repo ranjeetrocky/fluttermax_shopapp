@@ -13,62 +13,47 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  bool _isInitialized = false;
-  bool _isLoading = false;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Future.delayed(Duration.zero).then((value) {
-      _initializeOrders();
-    });
-  }
-
-  Future<void> _initializeOrders() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      await Provider.of<Orders>(context, listen: false).fetchAndSet();
-    } catch (e) {
-      print(e);
-      await showDialog<Null>(
-        context: context,
-        builder: (bctx) => AlertDialog(
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.of(bctx).pop(),
-                child: const Text('Okay'))
-          ],
-          content: const Text('Something went wrong...'),
-          title: const Text('An error occured'),
-        ),
-      );
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
+  Future<void> _refreshData() async => setState(() {});
 
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Orders')),
-      body: RefreshIndicator(
-        onRefresh: _initializeOrders,
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator.adaptive(),
-              )
-            : ListView.builder(
-                itemBuilder: (context, index) {
-                  return OrderItem(order: orders.orderItems[index]);
-                },
-                itemCount: orders.orderItems.length,
-              ),
+      body: FutureBuilder(
+        future: Provider.of<Orders>(context, listen: false).fetchAndSet(),
+        builder: (context, snapshot) {
+          snapshot.hasError
+              ? print("Error : " + snapshot.error.toString())
+              : print('No error');
+          print('called');
+          print(snapshot.connectionState);
+          return snapshot.connectionState == ConnectionState.waiting
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : RefreshIndicator(
+                  onRefresh: _refreshData,
+                  child: snapshot.hasError
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text('An error occured'),
+                              ElevatedButton.icon(
+                                  onPressed: () => _refreshData(),
+                                  icon: const Icon(Icons.refresh_rounded),
+                                  label: const Text('Refresh'))
+                            ],
+                          ),
+                        )
+                      : Consumer<Orders>(
+                          builder: (context, orders, child) => ListView.builder(
+                            itemBuilder: (context, index) {
+                              return OrderItem(order: orders.orderItems[index]);
+                            },
+                            itemCount: orders.orderItems.length,
+                          ),
+                        ),
+                );
+        },
       ),
     );
   }
