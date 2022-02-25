@@ -26,9 +26,9 @@ class Orders with ChangeNotifier {
     return _orderItems;
   }
 
-  final String _authToken;
+  final String _authToken, _userId;
 
-  Orders(this._authToken, this._orderItems) {
+  Orders(this._authToken, this._userId, this._orderItems) {
     kprint(_authToken);
   }
 
@@ -66,7 +66,8 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartproducts, double total) async {
     final timestamp = DateTime.now();
-    Uri ordersUri = Uri.parse(Consts.ordersUrl + "?auth=$_authToken");
+    Uri ordersUri = Uri.parse(Consts.kFirebaseDatabaseUrl +
+        'users/$_userId/orders.json?auth=$_authToken');
     try {
       final response = await http.post(ordersUri,
           body: json.encode({

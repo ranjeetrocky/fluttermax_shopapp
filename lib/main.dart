@@ -59,9 +59,9 @@ class _MyAppState extends State<MyApp> {
                 auth.userId!),
             create: (ctx) => Products('', <Product>[], '')),
         ChangeNotifierProxyProvider<Auth, Orders>(
-            update: (context, auth, previous) => Orders(
-                auth.token!, previous == null ? [] : previous.orderItems),
-            create: (context) => Orders('', <OrderItem>[])),
+            update: (context, auth, previous) => Orders(auth.token!,
+                auth.userId!, previous == null ? [] : previous.orderItems),
+            create: (context) => Orders('', '', <OrderItem>[])),
         ChangeNotifierProvider(create: (context) => Cart()),
       ],
       child: Consumer<Auth>(

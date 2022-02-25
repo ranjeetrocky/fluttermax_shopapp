@@ -26,7 +26,7 @@ class Product with ChangeNotifier {
     try {
       final response = await http.put(
           Uri.parse(Consts.kFirebaseDatabaseUrl +
-              'userFavorites/$userId/$id.json?auth=$authToken'),
+              'users/$userId/userFavorites/$id.json?auth=$authToken'),
           body: json.encode(!oldStatus));
       final responsedata = json.decode(response.body);
       print(response.statusCode);

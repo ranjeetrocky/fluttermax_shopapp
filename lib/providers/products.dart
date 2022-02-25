@@ -41,7 +41,7 @@ class Products with ChangeNotifier {
     }
     final favoriteResponse = await http.get(
       Uri.parse(Consts.kFirebaseDatabaseUrl +
-          'userFavorites/$_userId.json?auth=$_authToken'),
+          'users/$_userId/userFavorites.json?auth=$_authToken'),
     );
     final favoriteData = json.decode(favoriteResponse.body);
 
