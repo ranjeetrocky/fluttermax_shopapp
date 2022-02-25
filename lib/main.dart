@@ -10,7 +10,7 @@ import './screens/cart_screen.dart';
 import './screens/edit_product_sceen.dart';
 import './screens/order_screen.dart';
 import './screens/user_products_sceen.dart';
-import './screens/products_overview_screen.dart';
+import './screens/auth_screen.dart';
 
 const themeSeedColors = [
   Colors.pink,
@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const ProductsOverviewScreen(),
+        home: const AuthScreen(),
         routes: {
           CartScreen.routeName: (context) => const CartScreen(),
           OrderScreen.routeName: (context) => const OrderScreen(),
