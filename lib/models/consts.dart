@@ -9,4 +9,5 @@ class Consts {
   static const String kFirebaseDatabaseScheme = 'https';
   static const String kFirebaseDatabaseHost =
       'shop-app-6f3a8-default-rtdb.asia-southeast1.firebasedatabase.app';
+  static const apiKey = "AIzaSyCQJzrCENREkhVhGnLlIIpA9W8_k6qC49k";
 }

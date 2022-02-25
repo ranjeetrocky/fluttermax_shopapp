@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
 import './providers/products.dart';
+import './providers/auth.dart';
 import './screens/cart_screen.dart';
 import './screens/edit_product_sceen.dart';
 import './screens/order_screen.dart';
@@ -51,6 +52,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: Products()),
         ChangeNotifierProvider(create: (context) => Cart()),
         ChangeNotifierProvider(create: (context) => Orders()),
+        ChangeNotifierProvider.value(value: Auth()),
       ],
       child: MaterialApp(
         title: 'My shop',

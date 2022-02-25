@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -11,6 +14,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final deviceSize = MediaQuery.of(context).size;
     // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
     // transformConfig.translate(-10.0);
@@ -19,15 +23,17 @@ class AuthScreen extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  const Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                  const Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
+                  Color(0xFFFEDA77),
+                  Color(0xFFF58529),
+                  Color(0xFFDD2A7B),
+                  Color(0xFF8134AF),
+                  Color(0xFF515BD4),
                 ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: const [0, 1],
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
               ),
             ),
           ),
@@ -49,7 +55,7 @@ class AuthScreen extends StatelessWidget {
                       // ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: colorScheme.secondaryContainer,
                         boxShadow: const [
                           BoxShadow(
                             blurRadius: 8,
@@ -61,7 +67,7 @@ class AuthScreen extends StatelessWidget {
                       child: Text(
                         'MyShop',
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: colorScheme.secondary,
                           fontSize: 50,
                           fontFamily: 'Anton',
                           fontWeight: FontWeight.normal,
@@ -102,7 +108,7 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
       return;
@@ -115,6 +121,8 @@ class _AuthCardState extends State<AuthCard> {
       // Log user in
     } else {
       // Sign user up
+      await Provider.of<Auth>(context, listen: false)
+          .signUp(email: _authData['email']!, password: _authData['password']!);
     }
     setState(() {
       _isLoading = false;
@@ -135,6 +143,7 @@ class _AuthCardState extends State<AuthCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final deviceSize = MediaQuery.of(context).size;
     return Card(
       shape: RoundedRectangleBorder(
@@ -200,26 +209,36 @@ class _AuthCardState extends State<AuthCard> {
                 if (_isLoading)
                   const CircularProgressIndicator.adaptive()
                 else
-                  RaisedButton(
+                  ElevatedButton(
                     child:
                         Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                     onPressed: _submit,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(
+                          colorScheme.primaryContainer),
+                      foregroundColor:
+                          MaterialStateProperty.all(colorScheme.primary),
+                      padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30.0, vertical: 8.0),
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    textColor: Theme.of(context).colorScheme.primary,
                   ),
-                FlatButton(
+                TextButton(
                   child: Text(
                       '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all(colorScheme.primary),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 4)),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                   onPressed: _switchAuthMode,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  textColor: Theme.of(context).colorScheme.primary,
                 ),
               ],
             ),
