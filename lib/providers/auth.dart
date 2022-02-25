@@ -9,8 +9,9 @@ class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expiryDate;
   String? _userId;
+
   bool get isAuth {
-    return token != null;
+    return _token != null;
   }
 
   String? get token {
@@ -63,5 +64,12 @@ class Auth with ChangeNotifier {
 
   Future<void> signUp({required String email, required String password}) async {
     return _authenticate(email: email, password: email, urlSegment: 'signUp');
+  }
+
+  void logOut() {
+    _token = null;
+    _expiryDate = null;
+    _userId = null;
+    notifyListeners();
   }
 }

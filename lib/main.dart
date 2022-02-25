@@ -54,13 +54,13 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(value: Auth()),
         ChangeNotifierProxyProvider<Auth, Products>(
             update: (context, auth, previousProducts) => Products(
-                auth.token!,
+                auth.token ?? '',
                 previousProducts == null ? [] : previousProducts.items,
-                auth.userId!),
+                auth.userId ?? ''),
             create: (ctx) => Products('', <Product>[], '')),
         ChangeNotifierProxyProvider<Auth, Orders>(
-            update: (context, auth, previous) => Orders(auth.token!,
-                auth.userId!, previous == null ? [] : previous.orderItems),
+            update: (context, auth, previous) => Orders(auth.token ?? '',
+                auth.userId ?? '', previous == null ? [] : previous.orderItems),
             create: (context) => Orders('', '', <OrderItem>[])),
         ChangeNotifierProvider(create: (context) => Cart()),
       ],
