@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:fluttermax_state_management_shopapp/models/consts.dart';
+import 'package:fluttermax_state_management_shopapp/models/http_exeption.dart';
 import 'package:http/http.dart' as http;
 
 class Auth with ChangeNotifier {
@@ -13,7 +14,7 @@ class Auth with ChangeNotifier {
       {required String email,
       required String password,
       required String urlSegment}) async {
-    Uri authUri = Uri.parse(
+    final Uri authUri = Uri.parse(
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=${Consts.apiKey}');
     try {
       final response = await http.post(authUri,
@@ -23,8 +24,14 @@ class Auth with ChangeNotifier {
             "returnSecureToken": true,
           }));
       print(response.body);
+      final responseData = json.decode(response.body);
+      if (responseData['error'] != null) {
+        print(responseData['error']['message']);
+        throw HttpExeption(responseData['error']['message']);
+      }
     } catch (e) {
       print(e);
+      rethrow;
     }
   }
 
