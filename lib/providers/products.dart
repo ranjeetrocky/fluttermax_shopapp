@@ -32,7 +32,7 @@ class Products with ChangeNotifier {
     final response = await http.get(productsUri);
     var productData = json.decode(response.body) as Map<String, dynamic>;
     _items.clear();
-    print("Updating Products");
+    kprint("Updating Products");
     productData.forEach((productId, productData) {
       _items.add(Product(
           id: productId,
@@ -42,7 +42,7 @@ class Products with ChangeNotifier {
           imageUrl: productData['imageUrl'],
           isFavorite: productData['isFavorite']));
     });
-    print(_items.length);
+    kprint(_items.length);
     notifyListeners();
   }
 
@@ -74,7 +74,7 @@ class Products with ChangeNotifier {
           ));
       notifyListeners();
     } catch (error) {
-      print(error);
+      kprint(error);
       throw error;
     }
   }
@@ -96,11 +96,11 @@ class Products with ChangeNotifier {
       if (productIndex >= 0) {
         _items[productIndex] = newPoduct;
       } else {
-        print('...');
+        kprint('...');
       }
       notifyListeners();
     } catch (error) {
-      print(error);
+      kprint(error);
       throw error;
     }
   }
@@ -121,7 +121,7 @@ class Products with ChangeNotifier {
         throw HttpExeption('Could not Delete');
       }
     } catch (error) {
-      print(error);
+      kprint(error);
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();
       throw Exception(error);

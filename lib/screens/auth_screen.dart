@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:fluttermax_state_management_shopapp/models/http_exeption.dart';
+import '../models/consts.dart';
+import '../models/http_exeption.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
@@ -147,7 +148,7 @@ class _AuthCardState extends State<AuthCard> {
             email: _authData['email']!, password: _authData['password']!);
       }
     } on HttpExeption catch (error) {
-      print(error);
+      kprint(error);
       var errorMessage = 'Authentication failed';
       if (error.toString().contains('EMAIL_EXISTS')) {
         errorMessage = 'This email address is already in use.';
@@ -162,7 +163,7 @@ class _AuthCardState extends State<AuthCard> {
       }
       _showErrorDialog(errorMessage);
     } catch (error) {
-      print(e);
+      kprint(e);
       const errorMessage =
           'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);

@@ -4,6 +4,8 @@ import 'package:fluttermax_state_management_shopapp/providers/orders.dart'
 import 'package:fluttermax_state_management_shopapp/widgets/order_item.dart';
 import 'package:provider/provider.dart';
 
+import '../models/consts.dart';
+
 class OrderScreen extends StatefulWidget {
   static const routeName = '/OrderScreen';
   const OrderScreen({Key? key}) : super(key: key);
@@ -31,10 +33,10 @@ class _OrderScreenState extends State<OrderScreen> {
         future: _ordersFuture,
         builder: (context, snapshot) {
           snapshot.hasError
-              ? print("Error : " + snapshot.error.toString())
-              : print('No error');
-          print('called');
-          print(snapshot.connectionState);
+              ? kprint("Error : " + snapshot.error.toString())
+              : kprint('No error');
+          kprint('called');
+          kprint(snapshot.connectionState);
           return snapshot.connectionState == ConnectionState.waiting
               ? const Center(child: CircularProgressIndicator.adaptive())
               : snapshot.hasError

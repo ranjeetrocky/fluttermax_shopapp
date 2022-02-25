@@ -3,6 +3,8 @@ import 'package:fluttermax_state_management_shopapp/providers/product.dart';
 import 'package:fluttermax_state_management_shopapp/providers/products.dart';
 import 'package:provider/provider.dart';
 
+import '../models/consts.dart';
+
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/editProductScreen';
   const EditProductScreen({Key? key}) : super(key: key);
@@ -46,7 +48,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.didChangeDependencies();
     if (!_isDataInitialized) {
       var productId = ModalRoute.of(context)?.settings.arguments;
-      print('productid ${productId}');
+      kprint('productid ${productId}');
       if (productId != null) {
         _newProduct = Provider.of<Products>(context, listen: false)
             .findById(productId as String);
@@ -114,15 +116,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
       );
     } finally {
       _isloading = false;
-      print("Finally ran");
+      kprint("Finally ran");
       Navigator.of(context).pop();
     }
 
-    print(_newProduct.id);
-    print(_newProduct.title);
-    print(_newProduct.price);
-    print(_newProduct.description);
-    print(_newProduct.imageUrl);
+    kprint(_newProduct.id);
+    kprint(_newProduct.title);
+    kprint(_newProduct.price);
+    kprint(_newProduct.description);
+    kprint(_newProduct.imageUrl);
   }
 
   @override

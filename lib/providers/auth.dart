@@ -23,14 +23,14 @@ class Auth with ChangeNotifier {
             "password": password,
             "returnSecureToken": true,
           }));
-      print(response.body);
+      kprint(response.body);
       final responseData = json.decode(response.body);
       if (responseData['error'] != null) {
-        print(responseData['error']['message']);
+        kprint(responseData['error']['message']);
         throw HttpExeption(responseData['error']['message']);
       }
     } catch (e) {
-      print(e);
+      kprint(e);
       rethrow;
     }
   }

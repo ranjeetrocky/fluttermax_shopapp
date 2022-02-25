@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class Consts {
   static const double kBlur = 10;
   static const double kRadius = 15;
@@ -10,4 +12,10 @@ class Consts {
   static const String kFirebaseDatabaseHost =
       'shop-app-6f3a8-default-rtdb.asia-southeast1.firebasedatabase.app';
   static const apiKey = "AIzaSyCQJzrCENREkhVhGnLlIIpA9W8_k6qC49k";
+}
+
+kprint(Object object) {
+  if (kDebugMode) {
+    print(object.toString());
+  }
 }
