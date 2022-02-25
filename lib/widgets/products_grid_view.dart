@@ -6,6 +6,7 @@ import 'product_item.dart';
 
 class ProductsGridView extends StatelessWidget {
   final bool showOnlyFavorites;
+
   const ProductsGridView({
     Key? key,
     required this.showOnlyFavorites,
@@ -13,6 +14,7 @@ class ProductsGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
     final productsProvider = Provider.of<Products>(context);
     final products = showOnlyFavorites
         ? productsProvider.favoriteItems
@@ -20,8 +22,12 @@ class ProductsGridView extends StatelessWidget {
     return GridView.builder(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(10),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: mq.size.width < 1134
+            ? mq.size.width < 756
+                ? 2
+                : 3
+            : 4,
         childAspectRatio: 3 / 4,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
