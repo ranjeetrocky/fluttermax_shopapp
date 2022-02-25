@@ -29,11 +29,11 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> logIn({required String email, required String password}) async {
-    _authenticate(
+    return _authenticate(
         email: email, password: email, urlSegment: 'signInWithPassword');
   }
 
   Future<void> signUp({required String email, required String password}) async {
-    _authenticate(email: email, password: email, urlSegment: 'signUp');
+    return _authenticate(email: email, password: email, urlSegment: 'signUp');
   }
 }
