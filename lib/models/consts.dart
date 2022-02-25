@@ -19,3 +19,9 @@ kprint(Object object) {
     print(object.toString());
   }
 }
+
+kprintError(Object object) {
+  if (kDebugMode) {
+    print("Exception : =============== " + object.toString());
+  }
+}

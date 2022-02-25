@@ -9,6 +9,18 @@ class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expiryDate;
   String? _userId;
+  bool get isAuth {
+    return token != null;
+  }
+
+  String? get token {
+    if (_expiryDate != null &&
+        _expiryDate!.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
 
   Future<void> _authenticate(
       {required String email,
@@ -23,14 +35,19 @@ class Auth with ChangeNotifier {
             "password": password,
             "returnSecureToken": true,
           }));
-      kprint(response.body);
+      // kprint(response.body);
       final responseData = json.decode(response.body);
       if (responseData['error'] != null) {
         kprint(responseData['error']['message']);
         throw HttpExeption(responseData['error']['message']);
       }
+      _token = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expiryDate = DateTime.now()
+          .add(Duration(seconds: int.parse(responseData['expiresIn'])));
+      notifyListeners();
     } catch (e) {
-      kprint(e);
+      kprintError(e);
       rethrow;
     }
   }

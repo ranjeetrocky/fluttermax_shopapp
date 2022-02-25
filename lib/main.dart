@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import './screens/products_overview_screen.dart';
 import 'package:provider/provider.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
@@ -54,44 +55,50 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => Orders()),
         ChangeNotifierProvider.value(value: Auth()),
       ],
-      child: MaterialApp(
-        title: 'My shop',
-        darkTheme: ThemeData(
-          colorSchemeSeed: _seedColor,
-          brightness: Brightness.dark,
-          useMaterial3: true,
-          platform: currentPlatform,
-          fontFamily: 'Lato',
-          appBarTheme: const AppBarTheme(
-            systemOverlayStyle:
-                SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+      child: Consumer<Auth>(
+        builder: (context, auth, _) => MaterialApp(
+          title: 'My shop',
+          darkTheme: ThemeData(
+            colorSchemeSeed: _seedColor,
+            brightness: Brightness.dark,
+            useMaterial3: true,
+            platform: currentPlatform,
+            fontFamily: 'Lato',
+            appBarTheme: const AppBarTheme(
+              systemOverlayStyle:
+                  SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+            ),
+            cardTheme: const CardTheme(
+              elevation: 30,
+            ),
           ),
-          cardTheme: const CardTheme(
-            elevation: 30,
+          theme: ThemeData(
+            colorSchemeSeed: _seedColor,
+            brightness: Brightness.light,
+            useMaterial3: true,
+            platform: currentPlatform,
+            fontFamily: 'Lato',
+            appBarTheme: const AppBarTheme(
+              systemOverlayStyle:
+                  SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+            ),
+            cardTheme: const CardTheme(
+              elevation: 30,
+            ),
           ),
+          debugShowCheckedModeBanner: false,
+          home:
+              auth.isAuth ? const ProductsOverviewScreen() : const AuthScreen(),
+          routes: {
+            ProductsOverviewScreen.routeName: (context) =>
+                const ProductsOverviewScreen(),
+            CartScreen.routeName: (context) => const CartScreen(),
+            OrderScreen.routeName: (context) => const OrderScreen(),
+            UserProductsScreen.routName: (context) =>
+                const UserProductsScreen(),
+            EditProductScreen.routeName: (context) => const EditProductScreen(),
+          },
         ),
-        theme: ThemeData(
-          colorSchemeSeed: _seedColor,
-          brightness: Brightness.light,
-          useMaterial3: true,
-          platform: currentPlatform,
-          fontFamily: 'Lato',
-          appBarTheme: const AppBarTheme(
-            systemOverlayStyle:
-                SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-          ),
-          cardTheme: const CardTheme(
-            elevation: 30,
-          ),
-        ),
-        debugShowCheckedModeBanner: false,
-        home: const AuthScreen(),
-        routes: {
-          CartScreen.routeName: (context) => const CartScreen(),
-          OrderScreen.routeName: (context) => const OrderScreen(),
-          UserProductsScreen.routName: (context) => const UserProductsScreen(),
-          EditProductScreen.routeName: (context) => const EditProductScreen(),
-        },
       ),
     );
   }
