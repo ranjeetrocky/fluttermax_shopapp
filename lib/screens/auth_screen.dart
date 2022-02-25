@@ -250,7 +250,7 @@ class _AuthCardState extends State<AuthCard> {
                   textInputAction:
                       _authMode == AuthMode.Login ? TextInputAction.done : null,
                   validator: (value) {
-                    if (value!.isEmpty || value.length < 5) {
+                    if (value!.isEmpty || value.length < 6) {
                       return 'Password is too short!';
                     }
                     return null;

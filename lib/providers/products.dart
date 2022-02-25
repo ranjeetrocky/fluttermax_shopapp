@@ -10,7 +10,7 @@ class Products with ChangeNotifier {
   // Products() {
   //   fetchAndSetProducts();
   // }
-  List<Product> _items = [];
+  final List<Product> _items;
   final String _authToken;
   final String _userId;
 
@@ -29,8 +29,11 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  Future<void> fetchAndSetProducts() async {
-    Uri productsUri = Uri.parse(Consts.productsUrl + '?auth=$_authToken');
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? '&orderBy="creatorId"&equalTo="$_userId"' : '';
+    Uri productsUri =
+        Uri.parse(Consts.productsUrl + '?auth=$_authToken$filterString');
     final response = await http.get(productsUri);
     var productData = json.decode(response.body);
     if (productData == null) {
@@ -75,6 +78,7 @@ class Products with ChangeNotifier {
             'description': newProduct.description,
             'price': newProduct.price,
             'imageUrl': newProduct.imageUrl,
+            'creatorId': _userId,
           }));
       _items.insert(
           0,
