@@ -12,7 +12,22 @@ class Auth with ChangeNotifier {
   Future<void> signUp({required String email, required String password}) async {
     Uri authUri = Uri.parse(
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${Consts.apiKey}');
-    print(authUri.origin);
+    try {
+      final response = await http.post(authUri,
+          body: json.encode({
+            "email": email,
+            "password": password,
+            "returnSecureToken": true,
+          }));
+      print(response.body);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> logIn({required String email, required String password}) async {
+    Uri authUri = Uri.parse(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${Consts.apiKey}');
     try {
       final response = await http.post(authUri,
           body: json.encode({
