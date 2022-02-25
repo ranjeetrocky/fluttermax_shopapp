@@ -9,9 +9,12 @@ class Auth with ChangeNotifier {
   DateTime? _expiryDate;
   String? _userId;
 
-  Future<void> signUp({required String email, required String password}) async {
+  Future<void> _authenticate(
+      {required String email,
+      required String password,
+      required String urlSegment}) async {
     Uri authUri = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${Consts.apiKey}');
+        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=${Consts.apiKey}');
     try {
       final response = await http.post(authUri,
           body: json.encode({
@@ -26,18 +29,11 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> logIn({required String email, required String password}) async {
-    Uri authUri = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${Consts.apiKey}');
-    try {
-      final response = await http.post(authUri,
-          body: json.encode({
-            "email": email,
-            "password": password,
-            "returnSecureToken": true,
-          }));
-      print(response.body);
-    } catch (e) {
-      print(e);
-    }
+    _authenticate(
+        email: email, password: email, urlSegment: 'signInWithPassword');
+  }
+
+  Future<void> signUp({required String email, required String password}) async {
+    _authenticate(email: email, password: email, urlSegment: 'signUp');
   }
 }
