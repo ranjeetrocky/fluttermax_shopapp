@@ -18,16 +18,19 @@ class Product with ChangeNotifier {
     required this.imageUrl,
     this.isFavorite = false,
   });
-  Future<void> toggleFavouriteValue(String authToken) async {
+  Future<void> toggleFavouriteValue(String authToken, String userId) async {
     final oldStatus = isFavorite;
     isFavorite = !oldStatus;
 
     notifyListeners();
     try {
-      final response = await http.patch(
+      final response = await http.put(
           Uri.parse(Consts.kFirebaseDatabaseUrl +
-              'products/$id.json?auth=$authToken'),
-          body: json.encode({'isFavorite': !oldStatus}));
+              'userFavorites/$userId/$id.json?auth=$authToken'),
+          body: json.encode(!oldStatus));
+      final responsedata = json.decode(response.body);
+      print(response.statusCode);
+      print(responsedata);
       if (response.statusCode != 200) {
         throw HttpExeption(oldStatus
             ? "Could not remove product from Favorites"

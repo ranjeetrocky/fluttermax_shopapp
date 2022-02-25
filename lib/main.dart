@@ -53,9 +53,11 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider.value(value: Auth()),
         ChangeNotifierProxyProvider<Auth, Products>(
-            update: (context, auth, previousProducts) => Products(auth.token!,
-                previousProducts == null ? [] : previousProducts.items),
-            create: (ctx) => Products('', <Product>[])),
+            update: (context, auth, previousProducts) => Products(
+                auth.token!,
+                previousProducts == null ? [] : previousProducts.items,
+                auth.userId!),
+            create: (ctx) => Products('', <Product>[], '')),
         ChangeNotifierProxyProvider<Auth, Orders>(
             update: (context, auth, previous) => Orders(
                 auth.token!, previous == null ? [] : previous.orderItems),

@@ -67,8 +67,8 @@ class ProductItem extends StatelessWidget {
                         ),
                         onPressed: () async {
                           try {
-                            await currentProduct
-                                .toggleFavouriteValue(auth.token!);
+                            await currentProduct.toggleFavouriteValue(
+                                auth.token!, auth.userId!);
                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(

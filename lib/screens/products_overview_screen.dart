@@ -45,29 +45,29 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   }
 
   void _initializeData() async {
-    Provider.of<Products>(context).fetchAndSetProducts().catchError(
-      (error) {
-        return showDialog<Null>(
-          context: context,
-          builder: (bctx) => AlertDialog(
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(bctx).pop();
-                },
-                child: const Text('Okay'),
-              ),
-            ],
-            content: const Text('Something went wrong...'),
-            title: const Text('An error occured'),
-          ),
-        );
-      },
-    ).then((_) {
+    try {
+      Provider.of<Products>(context).fetchAndSetProducts();
+    } catch (e) {
+      await showDialog<Null>(
+        context: context,
+        builder: (bctx) => AlertDialog(
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(bctx).pop();
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+          content: const Text('Something went wrong...'),
+          title: const Text('An error occured'),
+        ),
+      );
+    } finally {
       setState(() {
         _isLoading = false;
       });
-    });
+    }
   }
 
   var _showOnlyFavorite = false;

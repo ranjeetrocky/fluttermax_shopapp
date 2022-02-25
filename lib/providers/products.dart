@@ -12,7 +12,9 @@ class Products with ChangeNotifier {
   // }
   List<Product> _items = [];
   final String _authToken;
-  Products(this._authToken, this._items);
+  final String _userId;
+
+  Products(this._authToken, this._items, this._userId);
 
   List<Product> get items {
     return [..._items];
@@ -30,7 +32,17 @@ class Products with ChangeNotifier {
   Future<void> fetchAndSetProducts() async {
     Uri productsUri = Uri.parse(Consts.productsUrl + '?auth=$_authToken');
     final response = await http.get(productsUri);
-    var productData = json.decode(response.body) as Map<String, dynamic>;
+    var productData = json.decode(response.body);
+    if (productData == null) {
+      throw HttpExeption('no product available ');
+    }
+    final favoriteResponse = await http.get(
+      Uri.parse(Consts.kFirebaseDatabaseUrl +
+          'userFavorites/$_userId.json?auth=$_authToken'),
+    );
+    final favoriteData = json.decode(favoriteResponse.body);
+
+    productData = productData as Map<String, dynamic>;
     _items.clear();
     kprint("Updating Products");
     productData.forEach((productId, productData) {
@@ -40,7 +52,8 @@ class Products with ChangeNotifier {
           description: productData['description'],
           price: double.parse(productData['price'].toString()),
           imageUrl: productData['imageUrl'],
-          isFavorite: productData['isFavorite']));
+          isFavorite:
+              favoriteData == null ? false : favoriteData[productId] ?? false));
     });
     kprint(_items.length);
     notifyListeners();
@@ -62,7 +75,6 @@ class Products with ChangeNotifier {
             'description': newProduct.description,
             'price': newProduct.price,
             'imageUrl': newProduct.imageUrl,
-            'isFavorite': newProduct.isFavorite,
           }));
       _items.insert(
           0,
