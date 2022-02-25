@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:fluttermax_state_management_shopapp/providers/cart.dart';
+import '../providers/cart.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/consts.dart';
@@ -26,15 +26,18 @@ class Orders with ChangeNotifier {
     return _orderItems;
   }
 
-  Uri ordersUri = Uri(
-    scheme: 'https',
-    host: Consts.kFirebaseDatabaseHost,
-    path: 'orders.json',
-  );
+  final String _authToken;
+
+  Orders(this._authToken, this._orderItems) {
+    kprint(_authToken);
+  }
+
   Future<void> fetchAndSet() async {
+    Uri ordersUri = Uri.parse(Consts.ordersUrl + "?auth=$_authToken");
     try {
       final response = await http.get(ordersUri);
       var data = json.decode(response.body);
+      kprint(data);
       if (data != null) {
         _orderItems.clear();
         data = data as Map<String, dynamic>;
@@ -63,6 +66,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartproducts, double total) async {
     final timestamp = DateTime.now();
+    Uri ordersUri = Uri.parse(Consts.ordersUrl + "?auth=$_authToken");
     try {
       final response = await http.post(ordersUri,
           body: json.encode({

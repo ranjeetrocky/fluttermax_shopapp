@@ -5,6 +5,6 @@ class HttpExeption implements Exception {
   String toString() {
     // TODO: implement toString
     // return super.toString();//returns "Instance of HttpException"
-    return "Exception: " + message;
+    return message;
   }
 }

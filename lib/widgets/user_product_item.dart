@@ -29,8 +29,15 @@ class UserProductItemWidget extends StatelessWidget {
               color: Theme.of(context).colorScheme.secondary,
             ),
             onPressed: () {
-              Navigator.of(context).pushNamed(EditProductScreen.routeName,
-                  arguments: product.id);
+              Navigator.of(context)
+                  .pushNamed(EditProductScreen.routeName, arguments: product.id)
+                  .then((value) {
+                if (value != null) {
+                  value = value as Map<String, String>;
+                  scaffoldMessengerObj
+                      .showSnackBar(SnackBar(content: Text(value['message']!)));
+                }
+              });
             },
           ),
           IconButton(
@@ -42,10 +49,12 @@ class UserProductItemWidget extends StatelessWidget {
               try {
                 await Provider.of<Products>(context, listen: false)
                     .deleteProduct(product.id);
+                scaffoldMessengerObj.hideCurrentSnackBar();
                 scaffoldMessengerObj.showSnackBar(const SnackBar(
                     content: Text('Product Deleted Successfully',
                         textAlign: TextAlign.center)));
               } catch (error) {
+                scaffoldMessengerObj.hideCurrentSnackBar();
                 scaffoldMessengerObj.showSnackBar(const SnackBar(
                     content: Text('Could not deleted Product',
                         textAlign: TextAlign.center)));

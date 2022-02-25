@@ -10,11 +10,10 @@ class Products with ChangeNotifier {
   // Products() {
   //   fetchAndSetProducts();
   // }
-  Uri productsUri = Uri(
-    scheme: 'https',
-    host: Consts.kFirebaseDatabaseHost,
-    path: 'products.json',
-  );
+  List<Product> _items = [];
+  final String _authToken;
+  Products(this._authToken, this._items);
+
   List<Product> get items {
     return [..._items];
   }
@@ -29,6 +28,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
+    Uri productsUri = Uri.parse(Consts.productsUrl + '?auth=$_authToken');
     final response = await http.get(productsUri);
     var productData = json.decode(response.body) as Map<String, dynamic>;
     _items.clear();
@@ -47,6 +47,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
+    Uri productsUri = Uri.parse(Consts.productsUrl + '?auth=$_authToken');
     var newProduct = Product(
       id: DateTime.now().toString(),
       title: product.title,
@@ -75,23 +76,23 @@ class Products with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       kprint(error);
-      throw error;
+      rethrow;
     }
   }
 
   Future<void> updateproduct(String id, Product newPoduct) async {
+    final uri = Uri.parse(
+        Consts.kFirebaseDatabaseUrl + 'products/$id.json?auth=$_authToken');
     try {
-      final uri = Uri(
-          scheme: Consts.kFirebaseDatabaseScheme,
-          host: Consts.kFirebaseDatabaseHost,
-          path: 'products/$id.json');
-      await http.patch(uri,
+      final response = await http.patch(uri,
           body: json.encode({
             'title': newPoduct.title,
             'price': newPoduct.price,
             'description': newPoduct.description,
             'imageUrl': newPoduct.imageUrl
           }));
+      kprint(_authToken);
+      kprint(json.decode(response.body));
       final productIndex = _items.indexWhere((product) => product.id == id);
       if (productIndex >= 0) {
         _items[productIndex] = newPoduct;
@@ -101,15 +102,13 @@ class Products with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       kprint(error);
-      throw error;
+      rethrow;
     }
   }
 
   Future<void> deleteProduct(String id) async {
-    final uri = Uri(
-        scheme: Consts.kFirebaseDatabaseScheme,
-        host: Consts.kFirebaseDatabaseHost,
-        path: 'products/$id.json');
+    final uri = Uri.parse(
+        Consts.kFirebaseDatabaseUrl + 'products/$id.json?auth=$_authToken');
     final existingProductIndex =
         _items.indexWhere((product) => product.id == id);
     Product? existingProduct = _items[existingProductIndex];
@@ -128,103 +127,4 @@ class Products with ChangeNotifier {
     }
     existingProduct = null;
   }
-
-  final List<Product> _items = [
-    Product(
-      id: 'p1',
-      title: 'Red Shirt',
-      description: 'A red shirt - it is pretty red!',
-      price: 29.99,
-      imageUrl:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    ),
-    Product(
-      id: 'p2',
-      title: 'Trousers',
-      description: 'A nice pair of trousers.',
-      price: 59.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    ),
-    Product(
-      id: 'p3',
-      title: 'Yellow Scarf',
-      description: 'Warm and cozy - exactly what you need for the winter.',
-      price: 19.99,
-      imageUrl:
-          'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-    ),
-    Product(
-      id: 'p4',
-      title: 'A Pan',
-      description: 'Prepare any meal you want.',
-      price: 49.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    ),
-    Product(
-      id: 'p5',
-      title: 'Red Shirt',
-      description: 'A red shirt - it is pretty red!',
-      price: 29.99,
-      imageUrl:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    ),
-    Product(
-      id: 'p6',
-      title: 'Trousers',
-      description: 'A nice pair of trousers.',
-      price: 59.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    ),
-    Product(
-      id: 'p7',
-      title: 'Yellow Scarf',
-      description: 'Warm and cozy - exactly what you need for the winter.',
-      price: 19.99,
-      imageUrl:
-          'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-    ),
-    Product(
-      id: 'p8',
-      title: 'A Pan',
-      description: 'Prepare any meal you want.',
-      price: 49.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    ),
-    Product(
-      id: 'p9',
-      title: 'Red Shirt',
-      description: 'A red shirt - it is pretty red!',
-      price: 29.99,
-      imageUrl:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    ),
-    Product(
-      id: 'p10',
-      title: 'Trousers',
-      description: 'A nice pair of trousers.',
-      price: 59.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    ),
-    Product(
-      id: 'p11',
-      title: 'Yellow Scarf',
-      description: 'Warm and cozy - exactly what you need for the winter.',
-      price: 19.99,
-      imageUrl:
-          'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-    ),
-    Product(
-      id: 'p12',
-      title: 'A Pan',
-      description: 'Prepare any meal you want.',
-      price: 49.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    ),
-  ];
 }

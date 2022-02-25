@@ -18,16 +18,15 @@ class Product with ChangeNotifier {
     required this.imageUrl,
     this.isFavorite = false,
   });
-  Future<void> toggleFavouriteValue() async {
+  Future<void> toggleFavouriteValue(String authToken) async {
     final oldStatus = isFavorite;
     isFavorite = !oldStatus;
+
     notifyListeners();
     try {
       final response = await http.patch(
-          Uri(
-              scheme: Consts.kFirebaseDatabaseScheme,
-              host: Consts.kFirebaseDatabaseHost,
-              path: 'products/$id.json'),
+          Uri.parse(Consts.kFirebaseDatabaseUrl +
+              'products/$id.json?auth=$authToken'),
           body: json.encode({'isFavorite': !oldStatus}));
       if (response.statusCode != 200) {
         throw HttpExeption(oldStatus

@@ -98,6 +98,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await Provider.of<Products>(context, listen: false)
             .updateproduct(_newProduct.id, _newProduct);
       }
+      Navigator.of(context).pop({
+        "message": _newProduct.id == ''
+            ? 'Product added successfully'
+            : 'Product updated Successfully'
+      });
     } catch (error) {
       await showDialog<Null>(
         context: context,
@@ -115,9 +120,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
         ),
       );
     } finally {
-      _isloading = false;
-      kprint("Finally ran");
-      Navigator.of(context).pop();
+      setState(() {
+        _isloading = false;
+      });
+      // Navigator.of(context).pop();
     }
 
     kprint(_newProduct.id);

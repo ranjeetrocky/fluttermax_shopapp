@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import './providers/product.dart';
 import './screens/products_overview_screen.dart';
 import 'package:provider/provider.dart';
 import './providers/cart.dart';
@@ -50,10 +51,16 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: Products()),
-        ChangeNotifierProvider(create: (context) => Cart()),
-        ChangeNotifierProvider(create: (context) => Orders()),
         ChangeNotifierProvider.value(value: Auth()),
+        ChangeNotifierProxyProvider<Auth, Products>(
+            update: (context, auth, previousProducts) => Products(auth.token!,
+                previousProducts == null ? [] : previousProducts.items),
+            create: (ctx) => Products('', <Product>[])),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+            update: (context, auth, previous) => Orders(
+                auth.token!, previous == null ? [] : previous.orderItems),
+            create: (context) => Orders('', <OrderItem>[])),
+        ChangeNotifierProvider(create: (context) => Cart()),
       ],
       child: Consumer<Auth>(
         builder: (context, auth, _) => MaterialApp(

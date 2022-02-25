@@ -8,9 +8,10 @@ class Consts {
   static const bool kDebugMode = !kReleaseMode && !kProfileMode;
   static const String kFirebaseDatabaseUrl =
       'https://shop-app-6f3a8-default-rtdb.asia-southeast1.firebasedatabase.app/';
-  static const String kFirebaseDatabaseScheme = 'https';
-  static const String kFirebaseDatabaseHost =
-      'shop-app-6f3a8-default-rtdb.asia-southeast1.firebasedatabase.app';
+  static const String productsUrl =
+      'https://shop-app-6f3a8-default-rtdb.asia-southeast1.firebasedatabase.app/products.json';
+  static const String ordersUrl =
+      'https://shop-app-6f3a8-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json';
   static const apiKey = "AIzaSyCQJzrCENREkhVhGnLlIIpA9W8_k6qC49k";
 }
 
