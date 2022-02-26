@@ -17,8 +17,10 @@ class _OrderItemState extends State<OrderItem> {
   var _isExpanded = false;
   @override
   Widget build(BuildContext context) {
+    double horizontalMargin = _isExpanded ? 0.0 : 16.0;
     return Card(
-      margin: const EdgeInsets.only(top: 16, right: 16, left: 16),
+      margin: EdgeInsets.only(
+          top: 16, right: horizontalMargin, left: horizontalMargin),
       child: Column(children: [
         ListTile(
           title: Text('\$${widget.order.amount}'),
@@ -35,33 +37,35 @@ class _OrderItemState extends State<OrderItem> {
             },
           ),
         ),
-        if (_isExpanded)
-          SizedBox(
-            height: min(widget.order.products.length * 30 + 10, 100),
-            child: ListView(
-              children: widget.order.products
-                  .map((product) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              product.title,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '${product.quantity}x \$${product.price}',
-                              style: const TextStyle(
-                                  fontSize: 18, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ))
-                  .toList(),
-            ),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height: _isExpanded
+              ? min(widget.order.products.length * 30 + 10, 100)
+              : 0,
+          child: ListView(
+            children: widget.order.products
+                .map((product) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            product.title,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '${product.quantity}x \$${product.price}',
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ))
+                .toList(),
           ),
+        ),
       ]),
     );
   }
