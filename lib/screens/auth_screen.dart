@@ -101,7 +101,8 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard> {
+class _AuthCardState extends State<AuthCard>
+    with SingleTickerProviderStateMixin {
   bool _showPassword = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
@@ -111,6 +112,33 @@ class _AuthCardState extends State<AuthCard> {
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  AnimationController? _animationController;
+  Animation<Size>? _heightAnimation;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    _heightAnimation = Tween<Size>(
+            begin: const Size(double.infinity, 283),
+            end: const Size(double.infinity, 371))
+        .animate(CurvedAnimation(
+            parent: _animationController as Animation<double>,
+            curve: Curves.bounceInOut));
+    _heightAnimation!.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _animationController!.removeListener(() {});
+  }
+
   void _showErrorDialog(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Error : " + message),
@@ -187,10 +215,12 @@ class _AuthCardState extends State<AuthCard> {
     if (_authMode == AuthMode.Login) {
       setState(() {
         _authMode = AuthMode.Signup;
+        _animationController!.forward();
       });
     } else {
       setState(() {
         _authMode = AuthMode.Login;
+        _animationController!.reverse();
       });
     }
   }
@@ -205,7 +235,9 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
+        height: _heightAnimation?.value.height,
         // height: _authMode == AuthMode.Signup ? 320 : 260,
+        constraints: BoxConstraints(minHeight: _heightAnimation!.value.height),
         // constraints:
         //     BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
         width: deviceSize.width * 0.75,
@@ -221,7 +253,7 @@ class _AuthCardState extends State<AuthCard> {
                       prefixIcon: Icon(Icons.email_outlined)),
                   autocorrect: true,
                   keyboardType: TextInputType.emailAddress,
-                  autofocus: true,
+                  // autofocus: true,
                   validator: (value) {
                     if (value!.isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
