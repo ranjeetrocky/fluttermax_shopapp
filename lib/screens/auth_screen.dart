@@ -127,9 +127,9 @@ class _AuthCardState extends State<AuthCard>
         .animate(CurvedAnimation(
             parent: _animationController as Animation<double>,
             curve: Curves.bounceInOut));
-    _heightAnimation!.addListener(() {
-      setState(() {});
-    });
+    // _heightAnimation!.addListener(() {
+    //   setState(() {});
+    // });
   }
 
   @override
@@ -146,21 +146,6 @@ class _AuthCardState extends State<AuthCard>
           label: 'Okay',
           onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar()),
     ));
-    // showDialog(
-    //   context: context,
-    //   builder: (ctx) => AlertDialog(
-    //     title: const Text('An Error Occurred!'),
-    //     content: Text("Error :" + message),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         child: const Text('Okay'),
-    //         onPressed: () {
-    //           Navigator.of(ctx).pop();
-    //         },
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 
   Future<void> _submit() async {
@@ -187,17 +172,6 @@ class _AuthCardState extends State<AuthCard>
     } on HttpExeption catch (error) {
       kprint(error.toString());
       var errorMessage = error.toString();
-      // if (error.toString().contains('EMAIL_EXISTS')) {
-      //   errorMessage = 'This email address is already in use.';
-      // } else if (error.toString().contains('INVALID_EMAIL')) {
-      //   errorMessage = 'This is not a valid email address';
-      // } else if (error.toString().contains('WEAK_PASSWORD')) {
-      //   errorMessage = 'This password is too weak.';
-      // } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-      //   errorMessage = 'Could not find a user with that email.';
-      // } else if (error.toString().contains('INVALID_PASSWORD')) {
-      //   errorMessage = 'Invalid password.';
-      // }
       _showErrorDialog(errorMessage);
     } catch (error) {
       kprintError(e);
@@ -234,14 +208,21 @@ class _AuthCardState extends State<AuthCard>
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        height: _heightAnimation?.value.height,
-        // height: _authMode == AuthMode.Signup ? 320 : 260,
-        constraints: BoxConstraints(minHeight: _heightAnimation!.value.height),
-        // constraints:
-        //     BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
-        width: deviceSize.width * 0.75,
-        padding: const EdgeInsets.all(16.0),
+      child: AnimatedBuilder(
+        animation: _heightAnimation as Listenable,
+        builder: (context, child) {
+          return Container(
+            height: _heightAnimation?.value.height,
+            // height: _authMode == AuthMode.Signup ? 320 : 260,
+            constraints:
+                BoxConstraints(minHeight: _heightAnimation!.value.height),
+            // constraints:
+            //     BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+            width: deviceSize.width * 0.75,
+            padding: const EdgeInsets.all(16.0),
+            child: child,
+          );
+        },
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
