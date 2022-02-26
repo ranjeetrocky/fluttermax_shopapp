@@ -14,6 +14,8 @@ import './screens/edit_product_sceen.dart';
 import './screens/order_screen.dart';
 import './screens/user_products_sceen.dart';
 import './screens/auth_screen.dart';
+import './screens/splash_screen.dart';
+import './models/consts.dart';
 
 const themeSeedColors = [
   Colors.pink,
@@ -96,8 +98,17 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           debugShowCheckedModeBanner: false,
-          home:
-              auth.isAuth ? const ProductsOverviewScreen() : const AuthScreen(),
+          home: auth.isAuth
+              ? const ProductsOverviewScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (context, snapshot) {
+                    kprint(snapshot.connectionState);
+                    return snapshot.connectionState == ConnectionState.waiting
+                        ? const SplashScreen()
+                        : const AuthScreen();
+                  },
+                ),
           routes: {
             ProductsOverviewScreen.routeName: (context) =>
                 const ProductsOverviewScreen(),

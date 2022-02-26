@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fluttermax_state_management_shopapp/models/consts.dart';
 import 'package:fluttermax_state_management_shopapp/models/http_exeption.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
@@ -29,19 +30,50 @@ class Auth with ChangeNotifier {
     return _userId;
   }
 
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      kprint('userData not saved on device');
+      return false;
+    }
+    try {
+      final userData = prefs.getString('userData');
+      final extractedUserData = json.decode(userData!) as Map<String, dynamic>;
+
+      final expiryDate =
+          DateTime.parse(extractedUserData['expiryDate'].toString());
+      kprint('autoLoginData : $userData');
+      if (expiryDate.isBefore(DateTime.now())) {
+        return false;
+      }
+
+      _token = extractedUserData['token'].toString();
+      _userId = extractedUserData['userId'].toString();
+      _expiryDate = expiryDate;
+      notifyListeners();
+      autoLogOut();
+      return true;
+    } catch (error) {
+      print("error : " + error.toString());
+    }
+    return false;
+  }
+
   Future<void> _authenticate(
       {required String email,
       required String password,
       required String urlSegment}) async {
-    final Uri authUri = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=${Consts.apiKey}');
+    final authUrl =
+        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=${Consts.apiKey}';
+    final Uri authUri = Uri.parse(authUrl);
+    final postBody = json.encode({
+      "email": email,
+      "password": password,
+      "returnSecureToken": true,
+    });
+    kprint(authUrl + "\n" + postBody);
     try {
-      final response = await http.post(authUri,
-          body: json.encode({
-            "email": email,
-            "password": password,
-            "returnSecureToken": true,
-          }));
+      final response = await http.post(authUri, body: postBody);
       // kprint(response.body);
       final responseData = json.decode(response.body);
       if (responseData['error'] != null) {
@@ -54,6 +86,15 @@ class Auth with ChangeNotifier {
           .add(Duration(seconds: int.parse(responseData['expiresIn'])));
       autoLogOut();
       notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': _userId,
+        'expiryDate': _expiryDate?.toIso8601String()
+      });
+      prefs.setString('userData', userData);
+
+      kprint('authenticated user data : ' + prefs.getString('userData')!);
     } catch (e) {
       kprintError(e);
       rethrow;
@@ -62,20 +103,23 @@ class Auth with ChangeNotifier {
 
   Future<void> logIn({required String email, required String password}) async {
     return _authenticate(
-        email: email, password: email, urlSegment: 'signInWithPassword');
+        email: email, password: password, urlSegment: 'signInWithPassword');
   }
 
   Future<void> signUp({required String email, required String password}) async {
-    return _authenticate(email: email, password: email, urlSegment: 'signUp');
+    return _authenticate(
+        email: email, password: password, urlSegment: 'signUp');
   }
 
-  void logOut() {
+  Future<void> logOut() async {
     _token = null;
     _expiryDate = null;
     _userId = null;
     if (_authTimer != null) {
       _authTimer?.cancel();
     } else {}
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('userData');
     kprint('Loggedout');
     notifyListeners();
   }
