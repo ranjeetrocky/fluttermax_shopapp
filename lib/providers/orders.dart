@@ -33,7 +33,8 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSet() async {
-    Uri ordersUri = Uri.parse(Consts.ordersUrl + "?auth=$_authToken");
+    Uri ordersUri = Uri.parse(Consts.kFirebaseDatabaseUrl +
+        'users/$_userId/orders.json?auth=$_authToken');
     try {
       final response = await http.get(ordersUri);
       var data = json.decode(response.body);
