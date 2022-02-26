@@ -20,7 +20,7 @@ class ProductsGridView extends StatelessWidget {
         ? productsProvider.favoriteItems
         : productsProvider.items;
     return GridView.builder(
-      physics: const BouncingScrollPhysics(),
+      // physics: const BouncingScrollPhysics(),//commented to enable refresh indicator
       padding: const EdgeInsets.all(10),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: mq.size.width < 1134

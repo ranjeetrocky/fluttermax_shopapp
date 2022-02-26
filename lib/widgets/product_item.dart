@@ -31,23 +31,11 @@ class ProductItem extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: GridTile(
-            child: Image.network(
-              product.imageUrl,
+            child: FadeInImage(
               fit: BoxFit.cover,
-              loadingBuilder: (context, child, imageChunkEvent) {
-                return imageChunkEvent == null
-                    ? child
-                    : Center(
-                        child: CircularProgressIndicator.adaptive(
-                          strokeWidth: 1,
-                          semanticsLabel: "Loading",
-                          value: imageChunkEvent.expectedTotalBytes != null
-                              ? imageChunkEvent.cumulativeBytesLoaded /
-                                  imageChunkEvent.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-              },
+              placeholder:
+                  const AssetImage('assets/images/product-placeholder.png'),
+              image: NetworkImage(product.imageUrl),
             ),
             header: GridTileBar(
               leading: CircleAvatar(
