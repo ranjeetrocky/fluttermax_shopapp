@@ -31,11 +31,14 @@ class ProductItem extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: GridTile(
-            child: FadeInImage(
-              fit: BoxFit.cover,
-              placeholder:
-                  const AssetImage('assets/images/product-placeholder.png'),
-              image: NetworkImage(product.imageUrl),
+            child: Hero(
+              tag: product.id,
+              child: FadeInImage(
+                fit: BoxFit.cover,
+                placeholder:
+                    const AssetImage('assets/images/product-placeholder.png'),
+                image: NetworkImage(product.imageUrl),
+              ),
             ),
             header: GridTileBar(
               leading: CircleAvatar(
