@@ -9,39 +9,50 @@ class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(product.title)),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 300,
-            width: double.infinity,
-            child: Hero(
-              tag: product.id,
-              child: Image.network(
-                product.imageUrl,
-                fit: BoxFit.cover,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 300,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(product.title),
+              background: Hero(
+                tag: product.id,
+                child: Image.network(
+                  product.imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            '\$${product.price}',
-            style: const TextStyle(fontSize: 20),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-            child: Text(
-              '\$${product.description}',
+          SliverList(
+              delegate: SliverChildListDelegate([
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              '\$${product.price}',
+              style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
               softWrap: true,
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: double.infinity,
-          ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              child: Text(
+                '\$${product.description}',
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
+            ),
+            const SizedBox(
+              height: 3000,
+              width: double.infinity,
+            ),
+          ])),
         ],
       ),
     );
