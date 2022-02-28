@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttermax_state_management_shopapp/screens/products_overview_screen.dart';
-import '../models/consts.dart';
-import '../models/http_exeption.dart';
 import 'package:provider/provider.dart';
 
+import '../models/consts.dart';
+import '../models/http_exeption.dart';
 import '../providers/auth.dart';
 
 enum AuthMode { Signup, Login }

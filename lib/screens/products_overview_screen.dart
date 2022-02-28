@@ -5,6 +5,8 @@ import 'package:fluttermax_state_management_shopapp/screens/cart_screen.dart';
 import 'package:fluttermax_state_management_shopapp/widgets/app_drawer.dart';
 import 'package:fluttermax_state_management_shopapp/widgets/badge.dart';
 import 'package:provider/provider.dart';
+
+import '../helpers/custom_routes.dart';
 import '../widgets/products_grid_view.dart';
 
 enum FilterOptions {
@@ -48,7 +50,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     try {
       Provider.of<Products>(context).fetchAndSetProducts();
     } catch (e) {
-      await showDialog<Null>(
+      await showDialog<void>(
         context: context,
         builder: (bctx) => AlertDialog(
           actions: [
@@ -92,7 +94,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               },
               child: IconButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(CartScreen.routeName);
+                  Navigator.of(context).push(
+                      ScaleRoute(builder: (context) => const CartScreen()));
                 },
                 icon: const Icon(Icons.shopping_cart_outlined),
               ),

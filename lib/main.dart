@@ -2,20 +2,22 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import './providers/product.dart';
-import './screens/products_overview_screen.dart';
+import 'package:fluttermax_state_management_shopapp/helpers/custom_routes.dart';
 import 'package:provider/provider.dart';
+
+import './models/consts.dart';
+import './providers/auth.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
+import './providers/product.dart';
 import './providers/products.dart';
-import './providers/auth.dart';
+import './screens/auth_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/edit_product_sceen.dart';
 import './screens/order_screen.dart';
-import './screens/user_products_sceen.dart';
-import './screens/auth_screen.dart';
+import './screens/products_overview_screen.dart';
 import './screens/splash_screen.dart';
-import './models/consts.dart';
+import './screens/user_products_sceen.dart';
 
 const themeSeedColors = [
   Colors.pink,
@@ -75,6 +77,10 @@ class _MyAppState extends State<MyApp> {
             useMaterial3: true,
             platform: currentPlatform,
             fontFamily: 'Lato',
+            pageTransitionsTheme: PageTransitionsTheme(builders: {
+              TargetPlatform.android: ScaleTransitionBuilder(),
+              TargetPlatform.iOS: ScaleTransitionBuilder()
+            }),
             appBarTheme: const AppBarTheme(
               systemOverlayStyle:
                   SystemUiOverlayStyle(statusBarColor: Colors.transparent),
